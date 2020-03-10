@@ -5,8 +5,7 @@ NRUNS=5
 for IT in "${ITEREATIONS[@]}"; do
   for TH in "${THREADS[@]}"; do
     for R in `seq 1 $NRUNS`; do
-            utime="$IT,$TH,$(TIMEFORMAT='%lU';time ./approxPiMT $IT $TH)"
-            echo -ne $utime
+          echo `(/usr/bin/time -f '%U' ./approxPiMT $IT $TH) 2>&1`",$IT,$TH"
             
     done
   done
