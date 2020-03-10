@@ -1,10 +1,10 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class approxPiMT{
 	static int R = 1;
 	static double insides[];
 	public static void main(String args[]){
-		Random r = new Random();
-		
+
 		int nPoints = Integer.parseInt(args[0]);
 		int nThreads = Integer.parseInt(args[1]);
 		
@@ -15,7 +15,7 @@ public class approxPiMT{
 		
 
 		for(int i = 0; i<nThreads;i++){
-			Thread t = step(r, nPoints, nThreads, i);
+			Thread t = step(nPoints, nThreads, i);
 			t.start();			
 			threads[i] = t;
 		}
@@ -37,12 +37,11 @@ public class approxPiMT{
 		System.out.println("Pi estimation: " + 4*(totalInside/nPoints));	
 	}
 	
-	public static Thread step(Random r, int nPoints, int nThreads, int threadID){
+	public static Thread step(int nPoints, int nThreads, int threadID){
 		return new Thread(() -> {
 			double countInside = 0;
 			for(int i=0; i<nPoints/nThreads;i++){
-				System.out.println(i  + " on " + threadID);
-				if(isInsideCircle(r.nextDouble(), r.nextDouble()))
+				if(isInsideCircle(ThreadLocalRandom.current().nextDouble(1), ThreadLocalRandom.current().nextDouble(1)))		
 					countInside++;
 			}
 			insides[threadID] = countInside;
